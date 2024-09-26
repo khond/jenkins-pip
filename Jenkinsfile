@@ -40,7 +40,29 @@ pipeline {
                 '''
             }
         }
-        stage('Deploy') {
+        stage('Deploy to stage') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                npm install netlify-cli -g
+                netlify --version
+                netlify deploy --dir=build
+                netlify status
+                
+                '''
+            }
+        }
+        stage('Verify') {
+           steps {
+               input message: 'Is it OK for Prod', ok: 'Ayo'
+           }
+        }
+        stage('Deploy to prod') {
             agent {
                 docker {
                     image 'node:18-alpine'
