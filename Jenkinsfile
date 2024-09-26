@@ -53,6 +53,7 @@ pipeline {
                 netlify --version
                 netlify deploy --dir=build --prod
                 netlify status
+                
                 '''
             }
         }
