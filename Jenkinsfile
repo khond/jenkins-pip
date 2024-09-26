@@ -5,10 +5,11 @@ pipeline {
         // Set npm cache directory to a writable path
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
         NETLIFY_AUTH_TOKEN = credentials("netlify_token")
+        NETLIFY_SITE_ID  = "81ba2f1d-317d-4cc3-bf53-7fdcc9d9c90f"
     }
 
     stages {
-        /*stage('Build') {
+        stage('Build') {
             agent {
                 docker {
                     image 'node:18-alpine'
@@ -38,7 +39,7 @@ pipeline {
                  npm test
                 '''
             }
-        }*/
+        }
         stage('Deploy') {
             agent {
                 docker {
@@ -50,16 +51,16 @@ pipeline {
                 sh '''
                 npm install netlify-cli -g
                 netlify --version
-                echo $NETLIFY_AUTH_TOKEN
-                netlify sites:list
+                netlify deploy --dir=build --prod
+                netlify status
                 '''
             }
         }
     }
-    //post {
-        //always {
-            //junit 'test-results/junit.xml'
-            //}
-    //}
+    post {
+        always {
+            junit 'test-results/junit.xml'
+            }
+    }
 }
 
