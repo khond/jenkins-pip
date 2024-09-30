@@ -58,9 +58,9 @@ pipeline {
             }
         }  
         stage('Verify') {
-            timeout(1) {
                steps {
-                   input message: 'Is it OK for Prod', ok: 'Ayo'
+                   timeout(1) {
+                     input message: 'Is it OK for Prod', ok: 'Ayo'
                }
             }
         }
